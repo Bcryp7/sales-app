@@ -14,7 +14,20 @@ class ApiCategoryController extends Controller
         /** Uncomment if don't want to have api routes available */
         #if((! request()->ajax())) return redirect('/');
 
-        $categories = Category::orderBy('name')->paginate(10);
+        $categories = Category::orderBy('name')->paginate(2);
+
+        if (request()->ajax() &&
+            request()->has('search')) {
+
+            $categories = Category::where(
+
+                request()->criteria,
+                'like',
+                '%' . request()->input('search') . '%'
+
+            )->orderBy('name')->paginate(2);
+
+        }
 
         return [
 

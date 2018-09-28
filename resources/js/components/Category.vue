@@ -22,18 +22,27 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <select class="form-control col-md-3" id="option" name="option">
+
+                                <select v-model="criteria"
+                                        class="form-control col-md-3">
                                     <option value="name">Name</option>
                                     <option value="description">Description</option>
+                                    <option value="status">Status</option>
                                 </select>
-                                <input type="text"
-                                       name="description"
+
+                                <input v-model="search"
+                                       @keyup.enter="categoryList(1, search, criteria)"
+                                       type="text"
                                        class="form-control"
                                        placeholder="Search...">
-                                <button type="submit" class="btn btn-primary">
+
+                                <button type="submit"
+                                        @click="categoryList(1, search, criteria)"
+                                        class="btn btn-primary">
                                     <i class="fa fa-search"></i>
                                     Search
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -96,12 +105,19 @@
                     <!-- Pagination -->
                     <nav>
                         <ul class="pagination">
+
                             <li class="page-item"
                                 v-if="pagination.current_page > 1">
 
                                 <a class="page-link"
                                    href="#"
-                                   @click.prevent="paginate(pagination.current_page - 1)">
+                                   @click.prevent="paginate(
+
+                                       pagination.current_page - 1,
+                                       search,
+                                       criteria
+
+                                   )">
                                     Before
                                 </a>
 
@@ -117,7 +133,13 @@
 
                                 <a class="page-link"
                                    href="#"
-                                   @click.prevent="paginate(page)"
+                                   @click.prevent="paginate(
+
+                                       page,
+                                       search,
+                                       criteria
+
+                                   )"
                                    v-text="page"
                                 ></a>
 
@@ -128,7 +150,13 @@
 
                                 <a class="page-link"
                                    href="#"
-                                   @click.prevent="paginate(pagination.current_page + 1)">
+                                   @click.prevent="paginate(
+
+                                       pagination.current_page + 1,
+                                       search,
+                                       criteria
+
+                                   )">
                                     Next
                                 </a>
 
@@ -243,6 +271,9 @@
                 },
                 offset: 3,
 
+                criteria: 'name',
+                search: '',
+
                 category_id: 0,
                 name: '',
                 description: '',
@@ -308,7 +339,7 @@
                     .then(res => {
 
                         this.closeModal()
-                        this.categoryList()
+                        this.categoryList(1, '', 'name')
 
                     })
                     .catch(err => {
@@ -330,7 +361,7 @@
                     .then(res => {
 
                         this.closeModal()
-                        this.categoryList()
+                        this.categoryList(1, '', 'name')
 
                     })
                     .catch(err => {
@@ -362,7 +393,7 @@
                             axios.put(`/categories/${category.id}/toggle-status`)
                             .then(res => {
 
-                                this.categoryList()
+                                this.categoryList(1, '', 'name')
 
                                 swal(
                                     'Done!',
@@ -405,9 +436,11 @@
                 return this.error;
 
             },
-            categoryList(page) {
+            categoryList(page, search, criteria) {
 
                 let url = '/api/categories?page=' + page
+                            + '&search=' + search
+                            + '&criteria=' + criteria
 
                 axios.get(url)
 
@@ -432,11 +465,11 @@
                 return string.charAt(0).toUpperCase() + string.slice(1);
 
             },
-            paginate(page) {
+            paginate(page, search, criteria) {
 
                 this.pagination.current_page = page
 
-                this.categoryList(page)
+                this.categoryList(page, search, criteria)
 
             }
 
@@ -477,7 +510,13 @@
         },
         mounted() {
 
-            this.categoryList()
+            this.categoryList(
+
+                1,
+                this.search,
+                this.criteria
+
+            )
 
         }
     }
