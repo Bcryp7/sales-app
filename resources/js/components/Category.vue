@@ -92,25 +92,46 @@
 
                         </tbody>
                     </table>
+
+                    <!-- Pagination -->
                     <nav>
                         <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#">Before</a>
+                            <li class="page-item"
+                                v-if="pagination.current_page > 1">
+
+                                <a class="page-link"
+                                   href="#"
+                                   @click.prevent="paginate(pagination.current_page - 1)">
+                                    Before
+                                </a>
+
                             </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
+
+                            <li v-for="page in pageNumber"
+                                :key="page"
+                                :class="[
+                                    'page-item',
+                                    page == isActivated ?
+                                        'active' : ''
+                                ]">
+
+                                <a class="page-link"
+                                   href="#"
+                                   @click.prevent="paginate(page)"
+                                   v-text="page"
+                                ></a>
+
                             </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
+
+                            <li class="page-item"
+                                v-if="pagination.current_page < pagination.last_page">
+
+                                <a class="page-link"
+                                   href="#"
+                                   @click.prevent="paginate(pagination.current_page + 1)">
+                                    Next
+                                </a>
+
                             </li>
                         </ul>
                     </nav>
@@ -209,6 +230,18 @@
                 categories: [],
                 model: 'category',
                 actionType: '',
+
+                pagination: {
+
+                    'total': 0,
+                    'current_page': 0,
+                    'per_page': 0,
+                    'last_page': 0,
+                    'from': 0,
+                    'to': 0
+
+                },
+                offset: 3,
 
                 category_id: 0,
                 name: '',
@@ -372,14 +405,18 @@
                 return this.error;
 
             },
-            categoryList() {
+            categoryList(page) {
 
-                axios.get('/api/categories')
+                let url = '/api/categories?page=' + page
+
+                axios.get(url)
 
                     .then(res => {
 
-                        console.log(res.data.data)
-                        this.categories = res.data.data
+                        console.log(res.data.data.data)
+
+                        this.categories = res.data.data.data
+                        this.pagination = res.data.pagination
 
                     })
 
@@ -393,6 +430,47 @@
             capitalizeFirstLetter(string) {
 
                 return string.charAt(0).toUpperCase() + string.slice(1);
+
+            },
+            paginate(page) {
+
+                this.pagination.current_page = page
+
+                this.categoryList(page)
+
+            }
+
+        },
+        computed: {
+
+            isActivated() {
+
+                return this.pagination.current_page
+
+            },
+            pageNumber() {
+
+                if (! this.pagination.to) { return []; }
+
+                let from = this.pagination.current_page - this.offset
+                if (from < 1) { from = 1; }
+
+                let to = from + (this.offset * 2)
+                if (to >= this.pagination.last_page) {
+
+                    to = this.pagination.last_page
+
+                }
+
+                let pagesArray = []
+                while (from <= to) {
+
+                    pagesArray.push(from)
+                    from++
+
+                }
+
+                return pagesArray
 
             }
 

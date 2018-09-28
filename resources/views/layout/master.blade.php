@@ -100,9 +100,9 @@
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/popper.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/pace.min.js') }}"></script>
 <script src="{{ asset('js/template.js') }}"></script>
 <script src="{{ asset('js/Chart.min.js') }}"></script>
-<script src="{{ asset('js/pace.min.js') }}"></script>
 <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
 </body>
