@@ -19,6 +19,8 @@
                     </button>
                 </div>
                 <div class="card-body">
+
+                    <!-- Search -->
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
@@ -46,6 +48,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                         <tr>

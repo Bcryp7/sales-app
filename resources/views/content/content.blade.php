@@ -4,7 +4,7 @@
 
     <template v-if="menu == 0">
 
-        <h1>Contenido del menu 0</h1>
+        <h1>Content of Menu 0</h1>
 
     </template>
 
