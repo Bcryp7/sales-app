@@ -3,11 +3,12 @@
 namespace App;
 
 use App\Traits\isSearching;
+use App\Traits\hasPagination;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use isSearching;
+    use isSearching, hasPagination;
 
     protected $fillable = ['name', 'status', 'description'];
 

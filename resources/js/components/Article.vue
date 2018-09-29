@@ -13,12 +13,14 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i>
-                    Categories
+                    Articles
+
                     <button @click="showModal('create')"
                             class="btn btn-secondary">
                         <i class="icon-plus"></i>
                         &nbsp; New
                     </button>
+
                 </div>
                 <div class="card-body">
 
@@ -35,13 +37,13 @@
                                 </select>
 
                                 <input v-model="search"
-                                       @keyup.enter="categoryList(1, search, criteria)"
+                                       @keyup.enter="articleList(1, search, criteria)"
                                        type="text"
                                        class="form-control"
                                        placeholder="Search...">
 
                                 <button type="submit"
-                                        @click="categoryList(1, search, criteria)"
+                                        @click="articleList(1, search, criteria)"
                                         class="btn btn-primary">
                                     <i class="fa fa-search"></i>
                                     Search
@@ -56,43 +58,51 @@
                         <thead>
                         <tr>
                             <th>Options</th>
+                            <th>Code</th>
                             <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
                             <th>Description</th>
                             <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
 
-                        <tr v-for="category in categories"
-                            :key="category.id">
+                        <tr v-for="article in articles"
+                            :key="article.id">
                             <td>
-                                <button @click="showModal('update', category)"
+                                <button @click="showModal('update', article)"
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button>
 
-                                <button @click="toggleStatus(category)"
+                                <button @click="toggleStatus(article)"
                                         :class="[
                                             'btn',
                                             'btn-sm',
-                                            category.status ?
+                                            article.status ?
                                                 'btn-danger' :
                                                 'btn-success'
                                         ]">
                                     <i :class="[
-                                            category.status ?
+                                            article.status ?
                                                 'icon-trash' :
                                                 'icon-check'
                                         ]"></i>
                                 </button>
 
                             </td>
-                            <td v-text="category.name"></td>
-                            <td v-text="category.description"></td>
+                            <td v-text="article.code"></td>
+                            <td v-text="article.name"></td>
+                            <td v-text="article.category"></td>
+                            <td v-text="article.price"></td>
+                            <td v-text="article.stock"></td>
+                            <td v-text="article.description"></td>
                             <td>
                                 <div>
 
-                                    <span v-if="category.status == 1"
+                                    <span v-if="article.status == 1"
                                           class="badge badge-success">
                                         Activated
                                     </span>
@@ -201,9 +211,9 @@
                                 </label>
                                 <div class="col-md-9">
                                     <input type="text"
-                                           v-model="name"
+                                           v-model="articleData.name"
                                            class="form-control"
-                                           placeholder="Name of Category...">
+                                           placeholder="Name of Article...">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -212,7 +222,7 @@
                                 </label>
                                 <div class="col-md-9">
                                     <input type="text"
-                                           v-model="description"
+                                           v-model="articleData.description"
                                            class="form-control"
                                            placeholder="Enter Description...">
                                 </div>
@@ -261,8 +271,8 @@
 
             return {
 
-                categories: [],
-                model: 'category',
+                articles: [],
+                model: 'article',
                 actionType: '',
 
                 pagination: {
@@ -280,9 +290,9 @@
                 criteria: 'name',
                 search: '',
 
-                category_id: 0,
-                name: '',
-                description: '',
+                articleData: {
+                    name: ''
+                },
 
                 modal: 0,
                 modalTitle: '',
@@ -302,8 +312,7 @@
                     this.modal = 1
                     this.modalTitle = 'Create ' + this.capitalizeFirstLetter(this.model)
                     this.actionType = 'Save'
-                    this.name = ''
-                    this.description = ''
+                    this.articleData = []
 
                 }
 
@@ -313,9 +322,12 @@
                     this.modal = 1
                     this.modalTitle = 'Update ' + this.capitalizeFirstLetter(this.model)
 
-                    this.category_id = data.id
-                    this.name = data.name
-                    this.description = data.description
+//                    this.articleData.category_id = data.category_id
+//                    this.articleData.code = data.code
+                    this.articleData.name = data.name
+//                    this.articleData.price = data.price
+//                    this.articleData.stock = data.stock
+//                    this.articleData.description = data.description
 
                 }
 
@@ -324,8 +336,6 @@
 
                 this.modal = 0
                 this.modalTitle = ''
-                this.name = ''
-                this.description = ''
                 this.error = 0
                 this.errorMessages = []
 
@@ -336,21 +346,20 @@
 
                     if (this.validate()) { return; }
 
-                    axios.post('/api/categories', {
+                    axios.post('/api/articles', {
 
-                        'name': this.name,
-                        'description': this.description
-
-                    })
-                    .then(res => {
-
-                        this.closeModal()
-                        this.categoryList(1, '', 'name')
+                        'name': this.articleData.name
 
                     })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                        .then(res => {
+
+                            this.closeModal()
+                            this.articleList(1, '', 'name')
+
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
 
                 }
 
@@ -358,28 +367,27 @@
 
                     if (this.validate()) { return; }
 
-                    axios.put(`/api/categories/${this.category_id}`, {
+                    axios.put(`/api/articles/${this.articleData.id}`, {
 
-                        'name': this.name,
-                        'description': this.description
-
-                    })
-                    .then(res => {
-
-                        this.closeModal()
-                        this.categoryList(1, '', 'name')
+                        'name': this.articleData.name
 
                     })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                        .then(res => {
+
+                            this.closeModal()
+                            this.articleList(1, '', 'name')
+
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
 
                 }
 
             },
-            toggleStatus(category) {
+            toggleStatus(article) {
 
-                let action = category.status ? 'deactivate it!' : 'activate it!'
+                let action = article.status ? 'deactivate it!' : 'activate it!'
 
                 swal({
                     title: 'Are you sure?',
@@ -394,22 +402,22 @@
 
                         if (res.value) {
 
-                            console.log(category)
+                            console.log(article)
 
-                            axios.put(`/api/categories/${category.id}/toggle-status`)
-                            .then(res => {
+                            axios.put(`/api/articles/${article.id}/toggle-status`)
+                                .then(res => {
 
-                                this.categoryList(1, '', 'name')
+                                    this.articleList(1, '', 'name')
 
-                                swal(
-                                    'Done!',
-                                    'success'
-                                )
+                                    swal(
+                                        'Done!',
+                                        'success'
+                                    )
 
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
 
                         }
 
@@ -421,17 +429,17 @@
                 this.error = 0
                 this.errorMessages = []
 
-                if (! this.name) {
+                if (! this.articleData.name) {
 
-                    this.errorMessages.push('Category Name is required')
+                    this.errorMessages.push('Article Name is required')
 
                 }
 
-                if (this.description.length > 255) {
+                /*if (this.description.length > 255) {
 
                     this.errorMessages.push('Description can\'t be no more than 255 characters long.')
 
-                }
+                }*/
 
                 if (this.errorMessages.length) {
 
@@ -442,19 +450,19 @@
                 return this.error;
 
             },
-            categoryList(page, search, criteria) {
+            articleList(page, search, criteria) {
 
-                let url = '/api/categories?page=' + page
-                            + '&search=' + search
-                            + '&criteria=' + criteria
+                let url = '/api/articles?page=' + page
+                    + '&search=' + search
+                    + '&criteria=' + criteria
 
                 axios.get(url)
 
                     .then(res => {
 
-                        console.log(res.data.data.data)
+                        console.log(res.data.data)
 
-                        this.categories = res.data.data.data
+                        this.articles = res.data.data
                         this.pagination = res.data.pagination
 
                     })
@@ -475,7 +483,7 @@
 
                 this.pagination.current_page = page
 
-                this.categoryList(page, search, criteria)
+                this.articleList(page, search, criteria)
 
             }
 
@@ -516,7 +524,7 @@
         },
         mounted() {
 
-            this.categoryList(
+            this.articleList(
 
                 1,
                 this.search,

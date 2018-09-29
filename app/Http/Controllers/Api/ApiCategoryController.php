@@ -14,21 +14,14 @@ class ApiCategoryController extends Controller
         /** Uncomment if don't want to have api routes available */
         #if((! request()->ajax())) return redirect('/');
 
-        $categoryData = $this->searching();
+        $category = new Category();
+
+        $categoryData = $category->searching();
 
         return [
 
             'data' => $categoryData,
-            'pagination' => [
-
-                'total' => $categoryData->total(),
-                'current_page' => $categoryData->currentPage(),
-                'per_page' => $categoryData->perPage(),
-                'last_page' => $categoryData->lastPage(),
-                'from' => $categoryData->firstItem(),
-                'to' => $categoryData->lastItem(),
-
-            ]
+            'pagination' => $category->pagination($categoryData)
 
         ];
 
@@ -71,29 +64,6 @@ class ApiCategoryController extends Controller
 
         $category->update();
 
-    }
-
-    /**
-     * @return mixed
-     * @internal param array|string $relations
-     */
-    private function searching() {
-
-        if (request()->ajax() && request()->has('search')) {
-
-            $modelData = Category::where(
-
-                request()->criteria,
-                'like',
-                '%' . request()->input('search') . '%'
-
-            )->orderBy('name')->paginate(2);
-
-            return $modelData;
-
-        }
-
-        return Category::orderBy('name')->paginate(2);
     }
 
 }

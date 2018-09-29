@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ArticleResource;
 
 class ApiArticleController extends Controller
 {
@@ -17,23 +18,16 @@ class ApiArticleController extends Controller
         /** Uncomment if don't want to have api routes available */
         #if((! request()->ajax())) return redirect('/');
 
-        $articleData = $this->searching();
+        $article = new Article();
+
+        $articleData = $article->searching();
 
         $articleData->load('category');
 
         return [
 
-            'data' => $articleData,
-            'pagination' => [
-
-                'total' => $articleData->total(),
-                'current_page' => $articleData->currentPage(),
-                'per_page' => $articleData->perPage(),
-                'last_page' => $articleData->lastPage(),
-                'from' => $articleData->firstItem(),
-                'to' => $articleData->lastItem(),
-
-            ]
+            'data' => ArticleResource::collection($articleData),
+            'pagination' => $article->pagination($articleData)
 
         ];
 
@@ -75,28 +69,5 @@ class ApiArticleController extends Controller
 
         $article->update();
 
-    }
-
-    /**
-     * @return mixed
-     * @internal param array|string $relations
-     */
-    private function searching() {
-
-        if (request()->ajax() && request()->has('search')) {
-
-            $modelData = Article::where(
-
-                request()->criteria,
-                'like',
-                '%' . request()->input('search') . '%'
-
-            )->orderBy('name')->paginate(2);
-
-            return $modelData;
-
-        }
-
-        return Article::orderBy('name')->paginate(2);
     }
 }
