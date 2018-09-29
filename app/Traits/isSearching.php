@@ -7,7 +7,6 @@ trait isSearching {
     /**
      * @return mixed
      * @internal param array|string $relations
-     *
      */
     public function searching() {
 
