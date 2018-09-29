@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\isSearching;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    use isSearching;
+
     protected $fillable = ['name', 'status', 'description'];
 
     public function articles() {

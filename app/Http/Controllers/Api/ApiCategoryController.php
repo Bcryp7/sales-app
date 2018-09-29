@@ -14,12 +14,74 @@ class ApiCategoryController extends Controller
         /** Uncomment if don't want to have api routes available */
         #if((! request()->ajax())) return redirect('/');
 
-        $categories = Category::orderBy('name')->paginate(2);
+        $categoryData = $this->searching();
 
-        if (request()->ajax() &&
-            request()->has('search')) {
+        return [
 
-            $categories = Category::where(
+            'data' => $categoryData,
+            'pagination' => [
+
+                'total' => $categoryData->total(),
+                'current_page' => $categoryData->currentPage(),
+                'per_page' => $categoryData->perPage(),
+                'last_page' => $categoryData->lastPage(),
+                'from' => $categoryData->firstItem(),
+                'to' => $categoryData->lastItem(),
+
+            ]
+
+        ];
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function store(Request $request)
+    {
+        $category = new Category();
+
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->status = 1;
+
+        $category->save();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Category  $category
+     */
+    public function update(Request $request, Category $category)
+    {
+        $category->name = $request->input('name') ?? $category->name;
+        $category->description = $request->input('description') ?? $category->description;
+
+        $category->update();
+    }
+
+    public function toggleStatus(Category $category)
+    {
+
+        $category->status ? $category->status = 0 : $category->status = 1;
+
+        $category->update();
+
+    }
+
+    /**
+     * @return mixed
+     * @internal param array|string $relations
+     */
+    private function searching() {
+
+        if (request()->ajax() && request()->has('search')) {
+
+            $modelData = Category::where(
 
                 request()->criteria,
                 'like',
@@ -27,24 +89,11 @@ class ApiCategoryController extends Controller
 
             )->orderBy('name')->paginate(2);
 
+            return $modelData;
+
         }
 
-        return [
-
-            'data' => $categories,
-            'pagination' => [
-
-                'total' => $categories->total(),
-                'current_page' => $categories->currentPage(),
-                'per_page' => $categories->perPage(),
-                'last_page' => $categories->lastPage(),
-                'from' => $categories->firstItem(),
-                'to' => $categories->lastItem(),
-
-            ]
-
-        ];
-
+        return Category::orderBy('name')->paginate(2);
     }
 
 }

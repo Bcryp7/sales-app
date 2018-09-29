@@ -334,7 +334,7 @@
 
                     if (this.validate()) { return; }
 
-                    axios.post('/categories', {
+                    axios.post('/api/categories', {
 
                         'name': this.name,
                         'description': this.description
@@ -356,7 +356,7 @@
 
                     if (this.validate()) { return; }
 
-                    axios.put(`/categories/${this.category_id}`, {
+                    axios.put(`/api/categories/${this.category_id}`, {
 
                         'name': this.name,
                         'description': this.description
@@ -394,7 +394,7 @@
 
                             console.log(category)
 
-                            axios.put(`/categories/${category.id}/toggle-status`)
+                            axios.put(`/api/categories/${category.id}/toggle-status`)
                             .then(res => {
 
                                 this.categoryList(1, '', 'name')

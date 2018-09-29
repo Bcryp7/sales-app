@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Traits\isSearching;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
+    use isSearching;
 
     protected $fillable = [
         'category_id',
