@@ -15,9 +15,6 @@ class ApiArticleController extends Controller
      */
     public function index() {
 
-        /** Uncomment if don't want to have api routes available */
-        #if((! request()->ajax())) return redirect('/');
-
         $article = new Article();
 
         $articleData = $article->searching();

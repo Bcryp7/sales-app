@@ -205,38 +205,105 @@
                     </div>
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label">
-                                    Name
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text"
-                                           v-model="articleData.name"
-                                           class="form-control"
-                                           placeholder="Name of Article...">
+
+                            <div class="row">
+
+                                <!-- Category -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>
+                                            Category
+                                        </label>
+                                        <select v-model="articleData.category_id"
+                                                class="form-control">
+                                            <option value="0" disabled>Select Categories</option>
+                                            <option v-for="category in categories"
+                                                    :key="category.id"
+                                                    :value="category.id" v-text="category.name"
+                                            ></option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label">
-                                    Description
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text"
-                                           v-model="articleData.description"
-                                           class="form-control"
-                                           placeholder="Enter Description...">
+
+                                <!-- Code -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>
+                                            Code
+                                        </label>
+                                        <input type="text"
+                                               v-model="articleData.code"
+                                               class="form-control"
+                                               placeholder="Article code...">
+                                    </div>
+
                                 </div>
+
+                                <div class="col-md-4">
+                                    <!-- Name -->
+                                    <div class="form-group">
+                                        <label>
+                                            Name
+                                        </label>
+                                        <input type="text"
+                                               v-model="articleData.name"
+                                               class="form-control"
+                                               placeholder="Article Name...">
+                                    </div>
+                                </div>
+
                             </div>
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <!-- Price -->
+                                    <div class="form-group">
+                                        <label>
+                                            Price
+                                        </label>
+                                        <input type="number"
+                                               v-model="articleData.price"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <!-- Stock -->
+                                    <div class="form-group">
+                                        <label>
+                                            Stock
+                                        </label>
+                                        <input type="number"
+                                               v-model="articleData.stock"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label>
+                                            Description
+                                        </label>
+                                        <input type="text"
+                                               v-model="articleData.description"
+                                               class="form-control"
+                                               placeholder="Enter Description...">
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </form>
 
                         <div v-show="error" class="form-group row div-error">
-                            <div class="text-center text-error">
+                            <div class="alert alert-danger text-error">
 
                                 <div v-for="error in errorMessages"
                                      :key="error">
-                                    <ol>
-                                        <li v-text="error"></li>
-                                    </ol>
+                                    <ul>
+                                        <li v-text="error" class="pull-left"></li>
+                                    </ul>
                                 </div>
 
                             </div>
@@ -290,9 +357,8 @@
                 criteria: 'name',
                 search: '',
 
-                articleData: {
-                    name: ''
-                },
+                articleData: [],
+                categories: [],
 
                 modal: 0,
                 modalTitle: '',
@@ -306,6 +372,8 @@
         methods: {
 
             showModal(action, data = []) {
+
+                this.categoryList()
 
                 if (action === 'create') {
 
@@ -338,6 +406,7 @@
                 this.modalTitle = ''
                 this.error = 0
                 this.errorMessages = []
+                this.articleData = []
 
             },
             createOrUpdate(actionType) {
@@ -348,7 +417,12 @@
 
                     axios.post('/api/articles', {
 
-                        'name': this.articleData.name
+                        'category_id': this.articleData.category_id,
+                        'code': this.articleData.code,
+                        'name': this.articleData.name,
+                        'price': this.articleData.price,
+                        'stock': this.articleData.stock,
+                        'description': this.articleData.description
 
                     })
                         .then(res => {
@@ -429,11 +503,10 @@
                 this.error = 0
                 this.errorMessages = []
 
-                if (! this.articleData.name) {
-
-                    this.errorMessages.push('Article Name is required')
-
-                }
+                if (! this.articleData.category_id) this.errorMessages.push('Category is required')
+                if (! this.articleData.code) this.errorMessages.push('Code is required')
+                if (! this.articleData.name) this.errorMessages.push('Article Name is required')
+                if (! this.articleData.stock) this.errorMessages.push('Stock is required')
 
                 /*if (this.description.length > 255) {
 
@@ -441,11 +514,7 @@
 
                 }*/
 
-                if (this.errorMessages.length) {
-
-                    this.error = 1;
-
-                }
+                if (this.errorMessages.length) this.error = 1
 
                 return this.error;
 
@@ -464,6 +533,25 @@
 
                         this.articles = res.data.data
                         this.pagination = res.data.pagination
+
+                    })
+
+                    .catch(err => {
+
+                        console.log(err)
+
+                    })
+
+            },
+            categoryList() {
+
+                axios.get('/api/categories/active')
+
+                    .then(res => {
+
+                        console.table(res.data.data)
+
+                        this.categories = res.data.data
 
                     })
 

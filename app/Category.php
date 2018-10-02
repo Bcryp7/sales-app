@@ -17,4 +17,10 @@ class Category extends Model
         return $this->hasMany(Article::class);
 
     }
+
+    public function scopeActive($query) {
+
+        return $query->whereStatus(1);
+
+    }
 }
