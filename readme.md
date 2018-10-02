@@ -17,3 +17,15 @@ can start building cools apps as quickly as possible.
 - [] Create Test Suite
 - [] Enhance Search functionality in table
 - [] Refactor/Recycle Vue Components
+
+#### Installation
+
+- git clone https://github.com/Bcryp7/sales-app.git
+- composer install
+- npm install
+- cp .env.example .env
+- php artisan key:generate
+- Set DB credentials in .env file
+- npm run watch
+- php artisan serve
+- Enjoy!
