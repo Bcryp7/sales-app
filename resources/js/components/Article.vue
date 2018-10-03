@@ -229,6 +229,47 @@
                                     </div>
                                 </div>
 
+                                <!-- Name -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>
+                                            Name
+                                        </label>
+                                        <input type="text"
+                                               v-model="articleData.name"
+                                               class="form-control"
+                                               placeholder="Article Name...">
+                                    </div>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>
+                                            Price
+                                        </label>
+                                        <input type="number"
+                                               v-model="articleData.price"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <!-- Stock -->
+                                    <div class="form-group">
+                                        <label>
+                                            Stock
+                                        </label>
+                                        <input type="number"
+                                               v-model="articleData.stock"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
                                 <!-- Code -->
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -241,47 +282,10 @@
                                                placeholder="Article code...">
                                     </div>
 
-                                </div>
+                                    <barcode :value="articleData.code"
+                                             :options="{ format: 'EAN-13' }"
+                                    >Generating Code Bar</barcode>
 
-                                <div class="col-md-4">
-                                    <!-- Name -->
-                                    <div class="form-group">
-                                        <label>
-                                            Name
-                                        </label>
-                                        <input type="text"
-                                               v-model="articleData.name"
-                                               class="form-control"
-                                               placeholder="Article Name...">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-4">
-                                    <!-- Price -->
-                                    <div class="form-group">
-                                        <label>
-                                            Price
-                                        </label>
-                                        <input type="number"
-                                               v-model="articleData.price"
-                                               class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <!-- Stock -->
-                                    <div class="form-group">
-                                        <label>
-                                            Stock
-                                        </label>
-                                        <input type="number"
-                                               v-model="articleData.stock"
-                                               class="form-control">
-                                    </div>
                                 </div>
 
                                 <div class="col-md-4">
@@ -337,6 +341,8 @@
 </template>
 
 <script>
+    import VueBarcode from 'vue-barcode'
+
     export default {
         data() {
 
@@ -613,6 +619,9 @@
 
             }
 
+        },
+        components: {
+            'barcode': VueBarcode
         },
         mounted() {
 
