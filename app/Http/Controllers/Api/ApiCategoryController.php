@@ -92,7 +92,7 @@ class ApiCategoryController extends Controller
 
             'data' => Category::active()
                         ->orderBy('name', 'asc')
-                            ->get(['id', 'name'])
+                            ->get(['id', 'name', 'status'])
 
         ];
 

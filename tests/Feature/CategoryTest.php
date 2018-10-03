@@ -68,13 +68,19 @@ class CategoryTest extends TestCase
     /** @test */
     public function can_get_active_categories() {
 
-        $categories = factory(Category::class, 5)->create( ['status' => 1] );
+        factory(Category::class, 5)->create();
 
-        $this->getJson("api/categories/active")->assertSuccessful();
+        $response = $this->getJson("api/categories/active");
 
-        foreach ($categories as $category) {
+        $response->assertSuccessful();
 
-            $this->assertEquals(1, $category->status);
+        foreach ($response->decodeResponseJson() as $key => $data) {
+
+            foreach ($data as $record) {
+
+                $this->assertEquals(1, $record['status']);
+
+            }
 
         }
 
