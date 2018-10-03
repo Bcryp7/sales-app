@@ -2,8 +2,8 @@
 
 This is a Sales application built with Laravel and VueJS with a CoreUI template.
 
-![Laravel](https://laravel.com/assets/img/laravel-logo-white.png)
-![VueJS](/home/bcrypt/Repositories/project/public/img/vuejs.png)
+![Laravel](public/img/laravel.png)
+![VueJS](public/img/vuejs.png)
 
 My intention with this app is that new developers can have a concrete application with Laravel + VueJS where
 they can use it as example to learn the right way, implementing the best practices possible and at the same
