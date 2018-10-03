@@ -216,7 +216,11 @@
                                         </label>
                                         <select v-model="articleData.category_id"
                                                 class="form-control">
-                                            <option value="0" disabled>Select Categories</option>
+                                            <option :value="articleData.category_id"
+                                                    v-text="articleData.category"
+                                                    disabled
+                                                    selected
+                                            ></option>
                                             <option v-for="category in categories"
                                                     :key="category.id"
                                                     :value="category.id" v-text="category.name"
@@ -358,6 +362,7 @@
                 search: '',
 
                 articleData: [],
+                article_id: 0,
                 categories: [],
 
                 modal: 0,
@@ -390,12 +395,14 @@
                     this.modal = 1
                     this.modalTitle = 'Update ' + this.capitalizeFirstLetter(this.model)
 
-//                    this.articleData.category_id = data.category_id
-//                    this.articleData.code = data.code
+                    this.article_id = data.id
+                    this.articleData.category_id = data.category_id
+                    this.articleData.category = data.category
+                    this.articleData.code = data.code
                     this.articleData.name = data.name
-//                    this.articleData.price = data.price
-//                    this.articleData.stock = data.stock
-//                    this.articleData.description = data.description
+                    this.articleData.price = data.price
+                    this.articleData.stock = data.stock
+                    this.articleData.description = data.description
 
                 }
 
@@ -441,9 +448,14 @@
 
                     if (this.validate()) { return; }
 
-                    axios.put(`/api/articles/${this.articleData.id}`, {
+                    axios.put(`/api/articles/${this.article_id}`, {
 
-                        'name': this.articleData.name
+                        'category_id': this.articleData.category_id,
+                        'code': this.articleData.code,
+                        'name': this.articleData.name,
+                        'stock': this.articleData.stock,
+                        'price': this.articleData.price,
+                        'description': this.articleData.description
 
                     })
                         .then(res => {
@@ -476,8 +488,6 @@
 
                         if (res.value) {
 
-                            console.log(article)
-
                             axios.put(`/api/articles/${article.id}/toggle-status`)
                                 .then(res => {
 
@@ -506,13 +516,11 @@
                 if (! this.articleData.category_id) this.errorMessages.push('Category is required')
                 if (! this.articleData.code) this.errorMessages.push('Code is required')
                 if (! this.articleData.name) this.errorMessages.push('Article Name is required')
+                if (! this.articleData.price) this.errorMessages.push('Price is required')
                 if (! this.articleData.stock) this.errorMessages.push('Stock is required')
 
-                /*if (this.description.length > 255) {
-
+                if (this.articleData.description.length > 255)
                     this.errorMessages.push('Description can\'t be no more than 255 characters long.')
-
-                }*/
 
                 if (this.errorMessages.length) this.error = 1
 
@@ -528,8 +536,6 @@
                 axios.get(url)
 
                     .then(res => {
-
-                        console.log(res.data.data)
 
                         this.articles = res.data.data
                         this.pagination = res.data.pagination
@@ -548,8 +554,6 @@
                 axios.get('/api/categories/active')
 
                     .then(res => {
-
-                        console.table(res.data.data)
 
                         this.categories = res.data.data
 

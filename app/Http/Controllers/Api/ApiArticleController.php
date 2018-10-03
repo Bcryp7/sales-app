@@ -49,6 +49,8 @@ class ApiArticleController extends Controller
     public function update(Request $request, Article $article)
     {
 
+        if (! request()->ajax()) return redirect('/');
+
         $article->category_id = $request->input('category_id') ?? $article->category_id;
         $article->code = $request->input('code') ?? $article->code;
         $article->name = $request->input('name') ?? $article->name;
