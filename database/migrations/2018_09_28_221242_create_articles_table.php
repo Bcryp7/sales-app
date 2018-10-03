@@ -24,7 +24,7 @@ class CreateArticlesTable extends Migration
             $table->boolean('status')->default(1);
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('articles');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
