@@ -8,7 +8,7 @@
     <meta name="description" content="Sales App Laravel + Vue Js">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="img/favicon.png">
-    <title>Sales App</title>
+    <title>{{ config('app.name') }}</title>
     <!-- Icons -->
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/simple-line-icons.min.css') }}">
@@ -31,9 +31,6 @@
     <ul class="nav navbar-nav d-md-down-none">
         <li class="nav-item px-3">
             <a class="nav-link" href="#">Desktop</a>
-        </li>
-        <li class="nav-item px-3">
-            <a class="nav-link" href="#">Configs</a>
         </li>
     </ul>
     <ul class="nav navbar-nav ml-auto">
@@ -70,7 +67,6 @@
                 <div class="dropdown-header text-center">
                     <strong>Account</strong>
                 </div>
-                <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
                 <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
             </div>
         </li>
@@ -89,7 +85,7 @@
 
 <footer class="app-footer">
     <span>
-        <a href="https://github.com/Bcryp7" target="_blank">
+        <a href="https://github.com/Bcryp7?tab=repositories" target="_blank">
             Bcryp7
         </a>
         {{ date('Y') }}
