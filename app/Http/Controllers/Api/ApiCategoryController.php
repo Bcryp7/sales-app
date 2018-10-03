@@ -34,8 +34,6 @@ class ApiCategoryController extends Controller
     public function store(Request $request)
     {
 
-        if (! request()->ajax()) return redirect('/');
-
         $category = new Category();
 
         $category->name = $request->input('name');
@@ -53,7 +51,8 @@ class ApiCategoryController extends Controller
     public function update(Request $request, Category $category)
     {
 
-        if (! request()->ajax()) return redirect('/');
+        /** Uncomment in case you need to restrict non ajax requests. */
+        //if (! request()->ajax()) return redirect('/');
 
         $category->name = $request->input('name') ?? $category->name;
         $category->description = $request->input('description') ?? $category->description;
@@ -70,7 +69,8 @@ class ApiCategoryController extends Controller
     public function toggleStatus(Category $category)
     {
 
-        if (! request()->ajax()) return redirect('/');
+        /** Uncomment in case you need to restrict non ajax requests. */
+        //if (! request()->ajax()) return redirect('/');
 
         $category->status ? $category->status = 0 : $category->status = 1;
 
@@ -85,7 +85,8 @@ class ApiCategoryController extends Controller
      */
     public function getActiveCategories() {
 
-        if (! request()->ajax()) return redirect('/');
+        /** Uncomment in case you need to restrict non ajax requests. */
+        //if (! request()->ajax()) return redirect('/');
 
         return [
 
