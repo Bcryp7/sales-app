@@ -21,6 +21,23 @@ can start building cools apps as quickly as possible.
 - [x] Categories Tests
 - [] Articles Tests
 
+##### To run all tests just use the command:
+    `/project/path$ ./vendor/bin/phpunit --testdox`
+    
+    PHPUnit 7.3.5 by Sebastian Bergmann and contributors.
+    
+    Feature\Category
+     ✔ Can visit categories index
+     ✔ Can create categories
+     ✔ Can update a category
+     ✔ Can toggle the status of a category
+     ✔ Can get active categories
+    
+    Time: 122 ms, Memory: 20.00MB
+    
+    OK (5 tests, 10 assertions)
+
+
 ##### Improvements
 - [] Enhance Search functionality in table
 - [] Refactor/Recycle Vue Components
