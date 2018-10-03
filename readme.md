@@ -17,7 +17,11 @@ can start building cools apps as quickly as possible.
 
 #### ToDo's
 
-- [] Create Test Suite
+##### Test Suite:
+- [x] Categories Tests
+- [] Articles Tests
+
+##### Improvements
 - [] Enhance Search functionality in table
 - [] Refactor/Recycle Vue Components
 
