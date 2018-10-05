@@ -50,6 +50,7 @@ can start building cools apps as quickly as possible.
 - cp .env.example .env
 - php artisan key:generate
 - Set DB credentials in .env file
+— php artisan migrate
 - npm run watch
 - php artisan serve
 - Learn!
