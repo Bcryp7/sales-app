@@ -19,17 +19,6 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function can_create_categories() {
-
-        $this->postJson('api/categories', $this->getCategoryData());
-
-        $this->assertEquals(1, Category::count());
-
-        $this->assertDatabaseHas('categories', $this->getCategoryData());
-
-    }
-
-    /** @test */
     public function can_update_a_category() {
 
         $category = factory(Category::class)->create();
