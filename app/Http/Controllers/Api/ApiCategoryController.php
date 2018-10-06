@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Category;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -28,10 +29,10 @@ class ApiCategoryController extends Controller
     }
 
     /**
-     *  @param Request $request
+     *  @param CategoryRequest $request
      *  @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
 
         $category = new Category();
