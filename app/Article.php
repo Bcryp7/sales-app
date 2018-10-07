@@ -21,8 +21,12 @@ class Article extends Model
     ];
 
     public function category() {
-    
+
         return $this->belongsTo(Category::class);
-        
+
+    }
+
+    public function toggleStatus() {
+        $this->status ? $this->status = 0 : $this->status = 1;
     }
 }

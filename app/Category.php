@@ -18,9 +18,12 @@ class Category extends Model
 
     }
 
-    public function scopeActive($query) {
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
 
-        return $query->whereStatus(1);
-
+    public function toggleStatus() {
+        $this->status ? $this->status = 0 : $this->status = 1;
     }
 }

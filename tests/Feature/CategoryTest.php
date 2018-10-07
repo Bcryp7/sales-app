@@ -21,7 +21,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function can_update_a_category() {
 
-        $category = factory(Category::class)->create();
+        $category = create(Category::class);
 
         $this->put("api/categories/$category->id", [ 'name' => 'Category 1 Updated' ]);
 
@@ -40,7 +40,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function can_toggle_the_status_of_a_category() {
 
-        $category = factory(Category::class)->create( ['status' => 1] );
+        $category = create(Category::class, ['status' => 1]);
 
         $this->put("api/categories/$category->id/toggle-status");
 
@@ -59,7 +59,7 @@ class CategoryTest extends TestCase
 
         factory(Category::class, 5)->create();
 
-        $response = $this->getJson("api/categories/active");
+        $response = $this->getJson("api/categories/filters?active=1");
 
         $response->assertSuccessful();
 
