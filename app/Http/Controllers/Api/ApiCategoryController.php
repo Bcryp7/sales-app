@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Filters\CategoryFilters;
 
 class ApiCategoryController extends Controller
 {
@@ -18,6 +19,7 @@ class ApiCategoryController extends Controller
         $category = new Category();
 
         $categoryData = $category->searching();
+
 
         return [
 
@@ -73,7 +75,7 @@ class ApiCategoryController extends Controller
         /** Uncomment in case you need to restrict non ajax requests. */
         //if (! request()->ajax()) return redirect('/');
 
-        $category->status ? $category->status = 0 : $category->status = 1;
+        $category->toggleStatus();
 
         $category->update();
 
@@ -84,14 +86,14 @@ class ApiCategoryController extends Controller
      *
      *  Let me know what you think, app's open to suggestions about good practices.
      */
-    public function getActiveCategories() {
+    public function getActiveCategories(CategoryFilters $filter) {
 
         /** Uncomment in case you need to restrict non ajax requests. */
         //if (! request()->ajax()) return redirect('/');
 
         return [
 
-            'data' => Category::active()
+            'data' => Category::filter($filter)
                         ->orderBy('name', 'asc')
                             ->get(['id', 'name', 'status'])
 

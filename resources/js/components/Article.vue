@@ -557,7 +557,7 @@
             },
             categoryList() {
 
-                axios.get('/api/categories/active')
+                axios.get('/api/categories/filters')
 
                     .then(res => {
 

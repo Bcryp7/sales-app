@@ -57,7 +57,7 @@ class ApiArticleController extends Controller
     public function toggleStatus(Article $article)
     {
 
-        $article->status ? $article->status = 0 : $article->status = 1;
+        $article->toggleStatus();
 
         $article->update();
 

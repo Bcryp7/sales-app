@@ -334,7 +334,9 @@
 
                 if (actionType === 'Save') {
 
-                    if (this.validate()) { return; }
+                    if (this.validate()) {
+                        return;
+                    }
 
                     axios.post('/api/categories', {
 
@@ -342,21 +344,23 @@
                         'description': this.description
 
                     })
-                    .then(res => {
+                        .then(res => {
 
-                        this.closeModal()
-                        this.categoryList(1, '', 'name')
+                            this.closeModal()
+                            this.categoryList(1, '', 'name')
 
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
 
                 }
 
                 if (actionType === 'Update') {
 
-                    if (this.validate()) { return; }
+                    if (this.validate()) {
+                        return;
+                    }
 
                     axios.put(`/api/categories/${this.category_id}`, {
 
@@ -364,15 +368,15 @@
                         'description': this.description
 
                     })
-                    .then(res => {
+                        .then(res => {
 
-                        this.closeModal()
-                        this.categoryList(1, '', 'name')
+                            this.closeModal()
+                            this.categoryList(1, '', 'name')
 
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
 
                 }
 
@@ -397,19 +401,19 @@
                             console.log(category)
 
                             axios.put(`/api/categories/${category.id}/toggle-status`)
-                            .then(res => {
+                                .then(res => {
 
-                                this.categoryList(1, '', 'name')
+                                    this.categoryList(1, '', 'name')
 
-                                swal(
-                                    'Done!',
-                                    'success'
-                                )
+                                    swal(
+                                        'Done!',
+                                        'success'
+                                    )
 
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
 
                         }
 
@@ -421,7 +425,7 @@
                 this.error = 0
                 this.errorMessages = []
 
-                if (! this.name) {
+                if (!this.name) {
 
                     this.errorMessages.push('Category Name is required')
 
@@ -445,8 +449,8 @@
             categoryList(page, search, criteria) {
 
                 let url = '/api/categories?page=' + page
-                            + '&search=' + search
-                            + '&criteria=' + criteria
+                    + '&search=' + search
+                    + '&criteria=' + criteria
 
                 axios.get(url)
 
@@ -489,10 +493,14 @@
             },
             pageNumber() {
 
-                if (! this.pagination.to) { return []; }
+                if (!this.pagination.to) {
+                    return [];
+                }
 
                 let from = this.pagination.current_page - this.offset
-                if (from < 1) { from = 1; }
+                if (from < 1) {
+                    from = 1;
+                }
 
                 let to = from + (this.offset * 2)
                 if (to >= this.pagination.last_page) {
@@ -517,11 +525,9 @@
         mounted() {
 
             this.categoryList(
-
                 1,
                 this.search,
                 this.criteria
-
             )
 
         }
@@ -563,7 +569,7 @@
     .text-error {
 
         color: red !important;
-        font-weight:bold;
+        font-weight: bold;
 
     }
 
